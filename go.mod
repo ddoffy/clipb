@@ -5,12 +5,12 @@ go 1.22.0
 toolchain go1.23.4
 
 require (
+	github.com/atotto/clipboard v0.1.4
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/spf13/cobra v1.8.1
 )
 
 require (
-	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dblohm7/wingoes v0.0.0-20240820181039-f2b84150679e // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/atotto/clipboard"
+	"github.com/go-vgo/robotgo"
 )
 
 func GetClipboardContent() (string, error) {
