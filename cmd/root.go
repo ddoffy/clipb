@@ -4,11 +4,13 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/ddoffy/clipb/handlers"
+	"github.com/go-redis/redis"
 	"github.com/spf13/cobra"
 )
 
@@ -17,9 +19,9 @@ var rootCmd = &cobra.Command{
 	Use:   "clipb",
 	Short: "Store cliipboard content in Redis",
 	Long: `
-		clipb is a command line tool to store clipboard content in Redis.
-		It can be used to store clipboard content in Redis and retrieve it later.
-		`,
+	clipb is a command line tool to store clipboard content in Redis.
+	It can be used to store clipboard content in Redis and retrieve it later.
+	`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
@@ -28,15 +30,30 @@ var rootCmd = &cobra.Command{
 		// get clipboard content
 		content, err := handlers.GetClipboardContent()
 		if err != nil {
-			log.Fatalf("Error getting clipboard content: %v", err)
+			log.Error("Error getting clipboard content: %v", err)
 		}
 
-		fmt.Println(content)
+		if content == "" {
+			log.Error("No content in clipboard")
+		} else {
+			// set content in Redis
+			err = setTextToRedis(rdb, content)
+			if err != nil {
+				log.Error("Error setting content in Redis: %v", err)
+			}
+		}
 
-		// set clipboard content
-		err = rdb.LPush("clipboard", content).Err()
+		// get image from clipboard
+		img, err := handlers.GetImg()
+
 		if err != nil {
-			log.Fatalf("Error setting clipboard content in Redis: %v", err)
+			log.Error("Error getting image from clipboard: %v", err)
+		} else {
+			// set image in Redis
+			err = setImageToRedis(rdb, img)
+			if err != nil {
+				log.Error("Error setting image in Redis: %v", err)
+			}
 		}
 	},
 }
@@ -61,4 +78,22 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func setTextToRedis(rdb *redis.Client, content string) error {
+	_, err := rdb.Set(Redis.TextKey, content, 0).Result()
+	if err != nil {
+		return fmt.Errorf("Error setting content in Redis: %v", err)
+	}
+
+	return nil
+}
+
+func setImageToRedis(rdb *redis.Client, img bytes.Buffer) error {
+	_, err := rdb.Set(Redis.ImgKey, img.Bytes(), 0).Result()
+	if err != nil {
+		return fmt.Errorf("Error setting image in Redis: %v", err)
+	}
+
+	return nil
 }

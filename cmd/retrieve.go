@@ -22,18 +22,54 @@ var retrieveCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		rdb := handlers.GetRedisClient()
 
-		// get clipboard content
-		content, err := rdb.LPop("clipboard").Result()
+		// check if Redis.TextKey is exist or not
+		keyExist, err := rdb.Exists(Redis.TextKey).Result()
 		if err != nil {
-			log.Fatalf("Error getting clipboard content from Redis: %v", err)
+			log.Fatalf("Error checking if key exists in Redis: %v", err)
 		}
 
-		fmt.Println(content)
+		if keyExist == 1 {
 
-		// set clipboard content
-		err = clipboard.WriteAll(content)
+			// get clipboard content
+			content, err := rdb.LPop(Redis.TextKey).Result()
+			if err != nil {
+				log.Fatalf("Error getting clipboard content from Redis: %v", err)
+			}
+
+			fmt.Println(content)
+
+			// set clipboard content
+			err = clipboard.WriteAll(content)
+			if err != nil {
+				log.Fatalf("Error setting clipboard content: %v", err)
+			}
+
+			return
+		}
+
+		// check if Redis.ImgKey is exist or not
+		keyExist, err = rdb.Exists(handlers.ImgKey).Result()
+
 		if err != nil {
-			log.Fatalf("Error setting clipboard content: %v", err)
+			log.Fatalf("Error checking if key exists in Redis: %v", err)
+		}
+
+		if keyExist == 1 {
+			// get image content
+			content, err := rdb.LPop(Redis.ImgKey).Result()
+			if err != nil {
+				log.Fatalf("Error getting image content from Redis: %v", err)
+			}
+
+			fmt.Println(content)
+
+			// set image content
+			err = clipboard.WriteAll(content)
+			if err != nil {
+				log.Fatalf("Error setting image content: %v", err)
+			}
+
+			return
 		}
 	},
 }

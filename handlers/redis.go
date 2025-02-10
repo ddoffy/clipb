@@ -25,3 +25,7 @@ func GetRedisClient() *redis.Client {
 
 	return rdb
 }
+
+// define key for text content and image content
+const TextKey = "clipboard"
+const ImgKey = "image_clipboard"
