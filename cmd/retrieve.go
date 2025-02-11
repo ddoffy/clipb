@@ -7,8 +7,9 @@ import (
 	"fmt"
 	"log"
 
+	"ddoffy/clipb/handlers"
+
 	"github.com/atotto/clipboard"
-	"github.com/ddoffy/clipb/handlers"
 	"github.com/spf13/cobra"
 )
 

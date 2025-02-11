@@ -9,7 +9,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/ddoffy/clipb/handlers"
+	"ddoffy/clipb/handlers"
+
 	"github.com/go-redis/redis"
 	"github.com/spf13/cobra"
 )
