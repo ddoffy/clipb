@@ -1,11 +1,9 @@
 module ddoffy/clipb
 
 go 1.22.0
-
-toolchain go1.23.4
+toolchain go1.24.1
 
 require (
-	ddoffy/clipb v0.0.0-20250210222314-1d2c8649dd33
 	github.com/atotto/clipboard v0.1.4
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-vgo/robotgo v0.110.5
@@ -42,6 +40,6 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	golang.org/x/exp v0.0.0-20241004190924-225e2abe05e6 // indirect
 	golang.org/x/image v0.21.0 // indirect
-	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781 // indirect
-	golang.org/x/sys v0.26.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
 )
